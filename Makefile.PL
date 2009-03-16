@@ -9,9 +9,9 @@ WriteMakefile(
   VERSION_FROM => 'lib/MooseX/Role/Restricted.pm',
   PL_FILES     => {},
   PREREQ_PM => {
-    'Moose' => 0,
+    'Moose'      => '0.72',
     'Test::More' => 0,
-  },
+    },
   dist     => {COMPRESS => 'gzip -9f', SUFFIX => 'gz',},
 );
 

@@ -1,6 +1,6 @@
 package MooseX::Role::Restricted;
 
-our $VERSION = '1.01';
+our $VERSION = '1.02';
 
 use Moose::Role;
 use Moose::Exporter;
@@ -46,20 +46,22 @@ has 'public_private_map' => (
   default => sub { +{} }
 );
 
-sub get_method_map {
-  my $self       = shift;
-  my $method_map = $self->SUPER::get_method_map(@_);
-  my $pp_map     = $self->public_private_map;
 
-  keys %$method_map;    # reset iter
-  while (my ($method, $info) = each %$method_map) {
-    next if $method eq 'meta';    # always public
-
-    my $private = exists $pp_map->{$method} ? $pp_map->{$method} : ($method =~ /^_/);
-    delete $method_map->{$method} if $private;
+sub apply {
+  my ($self, $other, %args) = @_;
+  my $pp_map = $self->public_private_map;
+  my @exclude = grep { exists $pp_map->{$_} ? $pp_map->{$_} : /^_/; } $self->get_method_list;
+  if (exists $args{excludes}) {
+    $args{excludes} = push @exclude,
+      (
+      ref $args{excludes} eq 'ARRAY'
+      ? @{$args{excludes}}
+      : $args{excludes}
+      );
   }
 
-  return $method_map;
+  $args{'excludes'} = \@exclude;
+  $self->SUPER::apply($other, %args);
 }
 
 1;

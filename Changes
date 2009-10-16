@@ -1,2 +1,5 @@
-0.01 -- Sun Mar 15 21:14:03 CDT 2009
+1.02 -- Fri Oct 16 08:54:18 CDT 2009
+  * Change to override apply instead of get_method_map
+
+1.01 -- Sun Mar 15 21:14:03 CDT 2009
   * Updated minimum required version of Moose to be 0.72
